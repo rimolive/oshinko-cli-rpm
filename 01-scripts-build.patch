@@ -1,0 +1,26 @@
+diff --git a/scripts/build.sh b/scripts/build.sh
+index 73f8b6edf..0d931cadb 100755
+--- a/scripts/build.sh
++++ b/scripts/build.sh
+@@ -8,7 +8,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
+         fi
+         TOP_DIR=$(greadlink -f `dirname "$0"` | grep -o '.*/oshinko-cli')
+ else
+-        TOP_DIR=$(readlink -f `dirname "$0"` | grep -o '.*/oshinko-cli')
++        TOP_DIR=`pwd`
+ fi
+ . $TOP_DIR/sparkimage.sh
+ 
+@@ -19,10 +19,10 @@ go get github.com/ghodss/yaml
+ PROJECT='github.com/radanalyticsio/oshinko-cli'
+ TAG=`git describe --tags --abbrev=0 2> /dev/null | head -n1`
+ if [ -z $TAG ]; then
+-    TAG='0.0.0'
++    TAG='0.5.4'
+ fi
+ 
+-GIT_COMMIT=`git log -n1 --pretty=format:%h`
++GIT_COMMIT="7acbd8382"
+ TAG="${TAG}-${GIT_COMMIT}"
+ 
+ APP=oshinko

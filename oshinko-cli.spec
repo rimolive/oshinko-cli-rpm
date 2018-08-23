@@ -5,10 +5,11 @@
 
 %global golang_version 1.10
 
+Version:        0.5.4   
+
 %gometa
 
 Name:           oshinko-cli
-Version:        0.5.4
 Release:        0%{?dist}
 Summary:        Command line interface for spark cluster management app
 
@@ -18,8 +19,12 @@ Source0:        https://%{goipath}/archive/v%{version}.tar.gz
 
 Patch0:         01-scripts-build.patch
 
-ExclusiveArch: x86_64
-
+# If go_arches not defined fall through to implicit golang archs
+%if 0%{?go_arches:1}
+ExclusiveArch:  %{go_arches}
+%else
+ExclusiveArch:  x86_64 aarch64 ppc64le s390x
+%endif
 BuildRequires:  golang >= %{golang_version}
 
 %description
@@ -73,5 +78,5 @@ install -Dpm 0755 _output/oshinko-cli %{buildroot}%{_bindir}/oshinko-cli
 %doc README.md
 
 %changelog
-* Thu Jul 26 2018 Ricardo Martinelli de Oliveira <rmartine@redhat.com> - 0-0.5.3
+* Thu Jul 26 2018 Ricardo Martinelli de Oliveira <rmartine@redhat.com> - 0-0.5.4
 - First package for Fedora

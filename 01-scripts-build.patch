@@ -1,5 +1,5 @@
 diff --git a/scripts/build.sh b/scripts/build.sh
-index 73f8b6edf..0d931cadb 100755
+index 73f8b6edf..e7953b5a3 100755
 --- a/scripts/build.sh
 +++ b/scripts/build.sh
 @@ -8,7 +8,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -24,3 +24,17 @@ index 73f8b6edf..0d931cadb 100755
  TAG="${TAG}-${GIT_COMMIT}"
  
  APP=oshinko
+@@ -38,8 +38,11 @@ TARGET=./cmd/oshinko
+ # 1.5 is still in use.
+ export GO15VENDOREXPERIMENT=1
+ if [ $CMD = build ]; then
+-    go build $GO_OPTIONS -ldflags \
+-    "-X $PROJECT/version.gitTag=$TAG -X $PROJECT/version.appName=$APP -X $PROJECT/version.sparkImage=$SPARK_IMAGE"\
++    go build -compiler gc $GO_OPTIONS -ldflags \
++    -tags="rpm_crashtraceback ${BUILDTAGS:-}" \
++    "-X $PROJECT/version.gitTag=$TAG -X $PROJECT/version.appName=$APP -X $PROJECT/version.sparkImage=$SPARK_IMAGE \
++    -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') \
++    -extldflags '-Wl,-z,relro  -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld '" -a -v -x \
+     -o $OUTPUT_PATH $TARGET
+     if [ "$?" -eq 0 ]; then
+        rm $OUTPUT_DIR/oshinko-cli || true

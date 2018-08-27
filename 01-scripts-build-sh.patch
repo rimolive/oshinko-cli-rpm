@@ -1,0 +1,13 @@
+diff --git a/scripts/build.sh b/scripts/build.sh
+index 73f8b6edf..dcbcf4c12 100755
+--- a/scripts/build.sh
++++ b/scripts/build.sh
+@@ -8,7 +8,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
+         fi
+         TOP_DIR=$(greadlink -f `dirname "$0"` | grep -o '.*/oshinko-cli')
+ else
+-        TOP_DIR=$(readlink -f `dirname "$0"` | grep -o '.*/oshinko-cli')
++        TOP_DIR=$(readlink -f `dirname "$0"` | grep -o '.*/oshinko-cli-0.5.4')
+ fi
+ . $TOP_DIR/sparkimage.sh
+ 

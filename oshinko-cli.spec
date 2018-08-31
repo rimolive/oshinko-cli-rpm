@@ -1,4 +1,6 @@
+%if 0%{?rhel} == 7
 %define debug_package %{nil}
+%endif
 
 %global goipath     github.com/radanalyticsio/oshinko-cli
 %global gopath      %{_datadir}/gocode
@@ -15,7 +17,7 @@ Version:        0.5.4
 %endif
 
 Name:           oshinko-cli
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        Command line interface for spark cluster management app
 
 License:        ASL 2.0
@@ -23,9 +25,10 @@ License:        ASL 2.0
 %if 0%{?fedora} >= 28
 URL:            %{gourl}
 %else
-URL:            https://github.com/radanalyticsio/oshinko-cli
+URL:            https://%{goipath}
 %endif
-Source0:        https://github.com/radanalyticsio/oshinko-cli/archive/v0.5.4.tar.gz
+Source0:        https://%{goipath}/archive/v%{version}.tar.gz
+                https://%{goipath}/archive/v%{version}/%{name}-v%{version}.tar.gz
 
 Patch0:         01-scripts-build-sh.patch
 
@@ -43,26 +46,26 @@ BuildRequires:  golang >= 1.9
 %endif
 
 %description
-The oshinko application manages Apache Spark clusters on OpenShift. The application
-consists of a REST server (oshinko-rest) and a web UI and is designed to run in an
-OpenShift project.
+The oshinko application manages Apache Spark clusters on OpenShift. The
+application consists of a REST server (oshinko-rest) and a web UI and is
+designed to run in an OpenShift project.
 
-This repository contains tools to launch the oshinko application along with the source
-code for the oshinko REST server in the rest subdirectory. The source code for the web
-UI is located in a different repository.
+This repository contains tools to launch the oshinko application along with
+the source code for the oshinko REST server in the rest subdirectory. The
+source code for the web UI is located in a different repository.
 
 %prep
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} == 7
 %setup -q -n %{name}-%{version}
 %else
 %gosetup -q -n %{name}-%{version}
 %endif
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} == 7
 %patch0 -p1
 %endif
 
 %build
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} == 7
 goipath="${goipath:-%{goipath}}"
 GO_BUILD_PATH="${GO_BUILD_PATH:-${PWD}/_build}"
 if [[ ! -e  ""$GO_BUILD_PATH"/src/${goipath}" ]] ; then
@@ -80,7 +83,7 @@ export LDFLAGS="${LDFLAGS:-}"
 
 export LDFLAGS="$LDFLAGS -X %{goipath}/version.gitTag=%{TAG} -X %{goipath}/version.appName=oshinko -X %{goipath}/version.sparkImage=%{SPARK_IMAGE}"
 
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} == 7
 make build
 %else
 %gobuild -o _output/oshinko ./cmd/oshinko
@@ -100,5 +103,5 @@ install -Dpm 0755 _output/oshinko %{buildroot}%{_bindir}/oshinko
 %doc README.md
 
 %changelog
-* Thu Jul 26 2018 Ricardo Martinelli de Oliveira <rmartine@redhat.com> - 0-0.5.4
+* Thu Jul 26 2018 Ricardo Martinelli de Oliveira <rmartine@redhat.com> - 0.5.4-1
 - First package for Fedora

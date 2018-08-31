@@ -51,22 +51,6 @@ This repository contains tools to launch the oshinko application along with the 
 code for the oshinko REST server in the rest subdirectory. The source code for the web
 UI is located in a different repository.
 
-%package -n %{goname}-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{goname}-devel
-The oshinko application manages Apache Spark clusters on OpenShift. The application
-consists of a REST server (oshinko-rest) and a web UI and is designed to run in an
-OpenShift project.
-
-This repository contains tools to launch the oshinko application along with the source
-code for the oshinko REST server in the rest subdirectory. The source code for the web
-UI is located in a different repository.
-
-This package contains library source intended for building other packages which use 
-import path with %{goipath} prefix.
-
 %prep
 %if 0%{?rhel} >= 7
 %setup -q -n %{name}-%{version}
@@ -103,9 +87,6 @@ make build
 %endif
 
 %install
-%if 0%{?fedora} >= 28
-%goinstall
-%endif
 install -Dpm 0755 _output/oshinko %{buildroot}%{_bindir}/oshinko
 
 %check
@@ -116,13 +97,6 @@ install -Dpm 0755 _output/oshinko %{buildroot}%{_bindir}/oshinko
 %files
 %license LICENSE
 %{_bindir}/oshinko
-
-%if 0%{?fedora} >= 28
-%files -n %{goname}-devel -f devel.file-list
-%else
-%files -n %{goname}-devel
-%endif
-%license LICENSE
 %doc README.md
 
 %changelog

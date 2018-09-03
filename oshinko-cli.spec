@@ -27,8 +27,7 @@ URL:            %{gourl}
 %else
 URL:            https://%{goipath}
 %endif
-Source0:        https://%{goipath}/archive/v%{version}.tar.gz
-                https://%{goipath}/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:        https://%{goipath}/archive/v%{version}/%{name}-v%{version}.tar.gz
 
 Patch0:         01-scripts-build-sh.patch
 
